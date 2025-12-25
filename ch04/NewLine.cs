@@ -4,6 +4,6 @@ class NewLine
 {
     static void Main()
     {
-        Console.Write("줄\n바꿈");
+        Console.WriteLine("줄\n바꿈");
     }
 }
