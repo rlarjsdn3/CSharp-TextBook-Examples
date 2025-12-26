@@ -1,17 +1,20 @@
 using System;
+using System.Runtime.InteropServices.Swift;
 
-class Car
+class Point
 {
-    private string brand; 
-    
-    public string GetBrand()
+    public int X { get; set; }
+    public int Y  { get; set; }
+
+    public void Move(int x, int y)
     {
-        return brand;
+        X = this.X + x;
+        Y = this.Y + y;
     }
 
-    public Car()
+    public override string ToString()
     {
-        brand = "Toyota";
+        return $"({X}, {Y})";
     }
 }
 
@@ -19,8 +22,18 @@ class Program
 {
     static void Main()
     {
-        Car myCar = new Car();
+        var point = new Point
+        {
+            X = 10,
+            Y = 20
+        };
+        point.Move(10, 20);
+        Console.WriteLine(point);
+    }
 
-        Console.WriteLine(myCar.GetBrand());
+    static void ChangePoint(Point point)
+    {
+        point.X = 100;
+        point.Y = 200;
     }
 }
