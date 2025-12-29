@@ -10,6 +10,5 @@ class UsingStaticClassesDemo
 
         WriteLine(Pow(2, 10));
         WriteLine(Max(3, 5));
-        WriteLine(nameof(System));
     }
 }
