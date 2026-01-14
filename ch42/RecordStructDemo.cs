@@ -1,7 +1,9 @@
 using System;
 
+// 직원 정보를 나타내는 레코드 클래스
 public record class EmployeeClass(string Name, int Age);
 
+// 직원 정보를 나타내는 레코드 구조체
 public record struct EmployeeStruct(string Name, int Age);
 
 class RecordStructDemo
