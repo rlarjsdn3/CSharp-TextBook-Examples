@@ -1,101 +1,51 @@
 using System;
 
-abstract class Animal
+static class EnumerableExtensions
 {
-    public string Name { get; }
-
-    protected Animal(string name)
+    public static void ForEach(
+        this IEnumerable<int> source, 
+        Action<int> action)
     {
-        Name = name;
-    }
+        if (source == null)
+        {
+            throw new ArgumentException(nameof(source));
+        }
 
-    public void Introduce()
-    {
-        Console.WriteLine($"I am {Name}");
-    }
+        if (action == null)
+        {
+            throw new ArgumentException(nameof(action));
+        }
 
-    public abstract void MakeSound();
-}
-
-interface IFlyable
-{
-    void Fly();
-}
-
-interface ISwimmable
-{
-    void Swim();
-}
-
-class Dog : Animal, ISwimmable
-{
-    public Dog(string name) : base(name) { }
-
-    public override void MakeSound()
-    {
-        Console.WriteLine("Woof!"); 
-    }
-
-    public void Swim()
-    {
-        Console.WriteLine("Dog is swimming");
+        foreach (var item in source)
+        {
+            action(item);
+        }
     }
 }
 
-class Eagle : Animal, IFlyable
+public class Counter
 {
-    public string Age { get; init; }
-    public Eagle(string name) : base(name) { }
+    public event Action<int>? ValueChanged;
 
-    public override void MakeSound()
+    private int _value;
+    public int Value { get; private set; }
+    public void Add(int delta)
     {
-        Console.WriteLine("Screech!");
-    }
-
-    public void Fly()
-    {
-        Console.WriteLine("Eagle is flying");
+        _value += delta;
+        ValueChanged?.Invoke(_value);
     }
 }
 
-class Duck : Animal, IFlyable, ISwimmable
-{
-    public Duck(string name) : base(name) { }
-
-    public override void MakeSound()
-    {
-        Console.WriteLine("Quack!");
-    }
-
-    public void Fly()
-    {
-        Console.WriteLine("Duck is flying");
-    }
-
-    public void Swim()
-    {
-        Console.WriteLine("Duck is swimming");
-    }
-}
-
-class Program
+public class Program
 {
     static void Main()
     {
-        Animal dog = new Dog("Buddy");
-        dog.Introduce();
-        dog.MakeSound();
+        var counter = new Counter();
 
-        IFlyable bird = new Eagle("Sky");
-        bird.Fly();
+        counter.ValueChanged += v => Console.WriteLine($"Changed: {v}");
 
-        Duck duck = new Duck("Donald");
-        duck.MakeSound();
-        duck.Swim();
+        var deltas = new List<int> { 1, 2, -3, 5 };
 
-        if (duck is IFlyable flyable)
-        {
-            flyable.Fly();
-        }
+        deltas.ForEach(x => counter.Add(x));
     }
 }
